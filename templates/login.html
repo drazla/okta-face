@@ -1,0 +1,32 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div id="sign-in-widget"></div>
+<script type="text/javascript">
+  new OktaSignIn({
+    baseUrl: "{{baseUri}}",
+    clientId: "{{clientId}}",
+    redirectUri: "http://localhost:8080/authorization-code/callback",
+    logo: 'https://www.okta.com/sites/default/files/icon--lock.svg',
+    username: "{{userName}}",
+    features: {
+      registration: true,                 // Enable self-service registration flow
+      rememberMe: false,                  // Setting to false will remove the checkbox to save username
+      // multiOptionalFactorEnroll: true,    // Allow users to enroll in multiple optional factors before finishing the authentication flow.
+      // webauthn: true,                     // Enable WebAuthn protocol for biometrics
+      // passwordlessAuth: true,             // Allow passwordless authentication
+      router: true,                       // Leave this set to true for the API demo
+    },
+    authParams: {
+      issuer: "{{baseUri}}/oauth2/default",
+      responseType: 'code',
+      state: '{{state}}',
+      display: 'page',
+      scopes: ['openid', 'profile', 'email']
+    }
+  }).renderEl(
+    { el: '#sign-in-widget' },
+    function (res) {}
+  );
+</script>
+{% endblock content %}

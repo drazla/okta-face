@@ -1,0 +1,27 @@
+{% extends "template.html" %}
+
+{% block content %}
+<h2>My Customer Portal</h2>
+
+{% if oidc.user_loggedin %}
+<div>
+    <p>Welcome back,</p>
+    <p>You have successfully authenticated against your Okta org, and have been redirected back to this application.</p>
+    <p>Visit <a href="{{ url_for('profile') }}">My Profile</a> in this application to view your secure personal profile.</p>
+</div>
+{% else %}
+
+<div>
+  <h3>Convenience and Security Together</h3>
+    <p>This example combines the power of Okta's world class identity and access management technology with the convenience of machine learning driven facial recognition.</p>
+    <p>Your face will be automatically detected and recognised when you sign in. Machine learning facial recognition algorithms identify your face and automatically inserts your user ID into the login screen.</p>
+    <p>It's ok if you are not recognised by the system. You'll be given the choice of either entering your user ID or signing up for a new account.</p>
+    <p>You have the choice to upload your photo when you sign up or you can come back later and upload your photo when it's convenient.</p>
+    <p>So remember to smile when you sign in to our new customer portal.</p>
+
+<!- form method="get" action="login">
+<form method="get" action="snapme">
+    <button id="login-button" class="btn btn-primary" type="submit">Sign In</button>
+</form>
+{% endif %}
+{% endblock content %}

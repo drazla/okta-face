@@ -1,0 +1,13 @@
+LOGOUT_URI                  = "https://{{OKTA_DOMAIN}}/oauth2/default/v1/logout"    # OAuth enpoint to logout the user session in Okta
+APP_HOST                    = "http://localhost"                # Hostname running this application
+APP_PORT                    = 8080                              # Port number that this application is listening on
+IMAGE_UPLOADS               = "profiles/"                       # Directory that stores the uploaded profile photos
+ALLOWED_IMAGE_EXTENSIONS    = ["JPEG", "JPG", "PNG", "GIF"]     # Acceptable extensions for the profile photo to be uploaded
+MAX_IMAGE_FILESIZE          = 0.5 * 1024 * 1024                 # Maximimum size of the profile photo to be uploaded: MB * 1024 * 1024
+SECRET_KEY                  = "SomethingNotEntirelySecret"
+OIDC_CLIENT_SECRETS         = "./client_secrets.json"
+OIDC_DEBUG                  = True
+OIDC_ID_TOKEN_COOKIE_SECURE = False
+OIDC_SCOPES                 = ["openid", "profile"]
+OVERWRITE_REDIRECT_URI      = "http://localhost:8080/authorization-code/callback"
+OIDC_CALLBACK_ROUTE         = "/authorization-code/callback"

@@ -1,0 +1,64 @@
+{% extends "template.html" %}
+
+{% block content %}
+<script>
+  function filesize(elem){
+    document.cookie = `filesize=${elem.files[0].size}`
+  }
+
+</script>
+
+<div>
+    <h2>My Profile</h2>
+    <p>Hello, <span>{{ profile.email }}</span>. Below is the information that was read with your <a
+            href="https://developer.okta.com/docs/api/resources/oidc.html#get-user-information"
+            target="_blank">Access Token</a>.
+    </p>
+
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Claim</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for key, claim in profile.items() %}
+    <tr>
+        <td>{{ key }}</td>
+        <td id="claim-{{ key }}">
+            {{ claim }}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+
+      <h3>My image</h3>
+      <hr>
+
+      <img src="{{ targetfilename }}" alt="{{ profile.email }}" width="150" height="200">
+
+      <form action="/profile" method="POST" enctype="multipart/form-data">
+
+        <div class="form-group">
+          <div class="custom-file">
+            <label>Select image</label>
+            <input type="file" class="custom-file-input" name="image" id="image" oninput="filesize(this);">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Upload</button>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}
