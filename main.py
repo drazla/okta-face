@@ -1,5 +1,4 @@
 import base64
-# To run this example, type the following: python facerec_from_webcam_faster.py
 import face_recognition
 import cv2
 import numpy as np
@@ -25,14 +24,12 @@ stderr_log_handler.setFormatter(formatter)
 
 logger.info('Starting')
 
-# Create a lock to ensure thread-safe behaviour when updating the output
-# lock = threading.Lock()
-
 app = Flask(__name__, static_url_path = "/profiles", static_folder = "profiles")
 
 app.config.from_object('config')
 logger.debug(app.config)
 logger.debug(app.config["LOGOUT_URI"])
+logger.debug('Listen on: %s:%s', app.config["APP_HOST"], app.config["APP_PORT"])
 
 oidc = OpenIDConnect(app)
 
@@ -64,9 +61,9 @@ def home():
 def login():
     bu = oidc.client_secrets['issuer'].split('/oauth2')[0]
     cid = oidc.client_secrets['client_id']
-    # userName = "marie.bashir@coolcoy.com"
 
-    destination = 'http://localhost:8080/profile'
+    destination = request.host_url + 'profile'
+    logger.debug('destination = %s', destination)
     state = {
         'csrf_token': session['oidc_csrf_token'],
         'destination': oidc.extra_data_serializer.dumps(destination).decode('utf-8')
@@ -220,7 +217,6 @@ def snapme():
 
     logger.debug('Setup login page')
 
-#    return render_template("home.html", oidc=oidc)
 # Render the login page
     bu = oidc.client_secrets['issuer'].split('/oauth2')[0]
     cid = oidc.client_secrets['client_id']
@@ -230,7 +226,8 @@ def snapme():
     else:
         userName = ""
 
-    destination = 'http://localhost:8080/profile'
+    destination = request.host_url + 'profile'
+    logger.debug('destination = %s', destination)
     state = {
         'csrf_token': session['oidc_csrf_token'],
         'destination': oidc.extra_data_serializer.dumps(destination).decode('utf-8')
@@ -247,13 +244,11 @@ def logout():
     logger.debug("*** id_token = %s", id_token)
     logger.debug("LOGOUT_URI = %s", app.config['LOGOUT_URI'])
 
-    # logoutRequest = "https://dev-640409.okta.com/oauth2/default/v1/logout?id_token_hint=" + id_token + "&post_logout_redirect_uri=http://localhost:8080/oidcLogout"
-    logoutRequest = app.config['LOGOUT_URI'] + "?id_token_hint=" + id_token + "&post_logout_redirect_uri=http://localhost:8080/oidcLogout"
+    logoutRequest = app.config['LOGOUT_URI'] + "?id_token_hint=" + id_token + "&post_logout_redirect_uri=" + request.host_url + "oidcLogout"
     logger.debug("logoutRequest = %s", logoutRequest)
 
     logger.warning("*** REDIRECTING HOME ****")
 
-    # return redirect(url_for("oidcLogout"))
     return redirect(logoutRequest)
 
 
